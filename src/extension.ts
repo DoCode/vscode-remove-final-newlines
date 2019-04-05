@@ -41,7 +41,7 @@ class RemoveSingleFinalNewlineHandler {
     }
 
     private _onWillSaveTextDocument(event: TextDocumentWillSaveEvent) {
-        if (this._config.get('removeSingleFinalNewline', false) || !this._config.get('insertFinalNewline', false)) {
+        if (this._config.get('removeFinalNewlines', false) && !this._config.get('insertFinalNewline', false)) {
             const doc = event.document;
             const edits = [];
 
@@ -63,7 +63,6 @@ class RemoveSingleFinalNewlineHandler {
                 }
             }
 
-            // window.setStatusBarMessage('Removed final newline(s)!', 3000);
             if (newlinesRemoved > 0) {
                 this._statusBarItem.text = newlinesRemoved === 1 ? 'Removed final newline!' : 'Removed final newlines!';
 

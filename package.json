@@ -2,7 +2,7 @@
   "name": "vscode-remove-final-newlines",
   "displayName": "Remove Final Newlines",
   "description": "A Visual Studio Code extension that removes final new lines on save.",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "publisher": "DoCode",
   "license": "SEE LICENSE IN LICENSE.md",
   "bugs": {
@@ -22,7 +22,7 @@
   ],
   "icon": "art/icon-256x256.png",
   "galleryBanner": {
-    "color": "#C80000",
+    "color": "#4C4C4C",
     "theme": "dark"
   },
   "activationEvents": [

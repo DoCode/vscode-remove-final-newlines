@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-remove-final-newlines" extension will be documented in this file.
 
+## [v1.1.0] - 2019-04-05
+
+- Add `removeFinalNewlines.formatAndRemoveFinalNewlines` command to format document and remove final newlines
+
 ## [v1.0.3] - 2019-04-05
 
 - Respect `files.insertFinalNewline` settings

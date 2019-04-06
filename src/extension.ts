@@ -24,6 +24,7 @@ export function activate(context: ExtensionContext) {
         }
 
         await commands.executeCommand("editor.action.formatDocument");
+
         var edits = await handler.getRemoveFinalNewlinesTextEdits(activeTextEditor.document);
         if (edits && edits.length > 0) {
             activeTextEditor.edit(editBuilder => {
@@ -33,6 +34,8 @@ export function activate(context: ExtensionContext) {
             });
 
             handler.showStatusBarItemText(edits.length === 1 ? 'Document formatted and removed final newline!' : 'Document formatted and removed final newlines!');
+        } else {
+            handler.showStatusBarItemText('Document formatted!');
         }
     });
 

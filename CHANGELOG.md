@@ -4,7 +4,7 @@ All notable changes to the "vscode-remove-final-newlines" extension will be docu
 
 ## [v1.1.1] - 2019-04-0
 
-- Print only previous action on statusbar
+- Print only previous action on the status bar
 
 ## [v1.1.0] - 2019-04-05
 

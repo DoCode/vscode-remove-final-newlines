@@ -6,7 +6,7 @@ A [Visual Studio Code](https://code.visualstudio.com/) extension that removes fi
 
 ### Using Command Palette (CMD/CTRL + Shift + P)
 
-```
+```cmd
 CMD + Shift + P -> Remove Final Newlines: Format document and remove final newlines
 ```
 

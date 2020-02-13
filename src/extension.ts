@@ -1,5 +1,6 @@
 import {
     commands,
+    ConfigurationChangeEvent,
     Disposable,
     ExtensionContext,
     Range,
@@ -9,13 +10,11 @@ import {
     TextDocumentWillSaveEvent,
     TextEdit,
     window,
-    workspace,
-    WorkspaceConfiguration
+    workspace
 } from 'vscode';
 
 export function activate(context: ExtensionContext) {
-    const config = workspace.getConfiguration('files', null);
-    const handler = new RemoveSingleFinalNewlineHandler(config);
+    const handler = new RemoveSingleFinalNewlineHandler();
 
     let command = commands.registerCommand('removeFinalNewlines.formatAndRemoveFinalNewlines', async () => {
         const activeTextEditor = window.activeTextEditor;
@@ -25,7 +24,7 @@ export function activate(context: ExtensionContext) {
 
         await commands.executeCommand("editor.action.formatDocument");
 
-        var edits = await handler.getRemoveFinalNewlinesTextEdits(activeTextEditor.document);
+        var edits = handler.getRemoveFinalNewlinesTextEdits(activeTextEditor.document);
         if (edits && edits.length > 0) {
             activeTextEditor.edit(editBuilder => {
                 for (let i = 0; i < edits.length; i++) {
@@ -45,13 +44,10 @@ export function activate(context: ExtensionContext) {
 
 class RemoveSingleFinalNewlineHandler {
     private _disposable: Disposable;
-    private _config: WorkspaceConfiguration;
     private _statusBarItem: StatusBarItem;
 
-    constructor(config: WorkspaceConfiguration) {
+    constructor() {
         const subscriptions: Disposable[] = [];
-
-        this._config = config;
 
         workspace.onWillSaveTextDocument(this._onWillSaveTextDocument, this, subscriptions);
         workspace.onDidChangeConfiguration(this._onDidChangeConfiguration, this, subscriptions);
@@ -82,7 +78,10 @@ class RemoveSingleFinalNewlineHandler {
             return edits;
         }
 
-        if (!this._config.get('insertFinalNewline', false)) {
+        const config = workspace.getConfiguration('', doc);
+        const insertFinalNewline = config.get<boolean>('files.insertFinalNewline', false);
+
+        if (!insertFinalNewline) {
             for (let index = doc.lineCount - 1; index > 0; index--) {
                 const prevLine = doc.lineAt(index - 1);
                 const currentLine = doc.lineAt(index);
@@ -101,7 +100,11 @@ class RemoveSingleFinalNewlineHandler {
     }
 
     private _onWillSaveTextDocument(event: TextDocumentWillSaveEvent): void {
-        if (this._config.get('removeFinalNewlines', false) && !this._config.get('insertFinalNewline', false)) {
+        const config = workspace.getConfiguration('files', event.document);
+        const removeFinalNewlines = config.get<boolean>('removeFinalNewlines', false);
+        const insertFinalNewline = config.get<boolean>('insertFinalNewline', false);
+
+        if (removeFinalNewlines && !insertFinalNewline) {
             const edits = this.getRemoveFinalNewlinesTextEdits(event.document);
             if (edits && edits.length > 0) {
                 this.showStatusBarItemText(edits.length === 1 ? 'Removed final newline!' : 'Removed final newlines!');
@@ -110,7 +113,8 @@ class RemoveSingleFinalNewlineHandler {
         }
     }
 
-    private _onDidChangeConfiguration(): void {
-        this._config = workspace.getConfiguration('files', null);
+    private _onDidChangeConfiguration(e: ConfigurationChangeEvent): void {
+        if (e.affectsConfiguration('files.removeFinalNewlines')) {
+        }
     }
 }

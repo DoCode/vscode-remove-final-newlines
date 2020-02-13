@@ -2,9 +2,31 @@
 
 All notable changes to the "vscode-remove-final-newlines" extension will be documented in this file.
 
-## [v1.1.1] - 2019-04-0
+## [v1.2.0] - 2020-02-13
 
-- Print only previous action on statusbar
+- Support for language scope (file type) configuration
+  Now it's possible to override a global config for file types.
+
+  **Example:**
+
+  ```json
+  . . .
+  "files.insertFinalNewline": false,
+  "files.removeFinalNewlines": true,
+  "files.trimFinalNewlines": false,
+  "files.trimTrailingWhitespace": true,
+  "[markdown]": {
+    "files.insertFinalNewline": true,
+    "files.removeFinalNewlines": false,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": false
+  },
+  . . .
+  ```
+
+## [v1.1.1] - 2019-04-06
+
+- Print only previous action on the status bar
 
 ## [v1.1.0] - 2019-04-05
 
